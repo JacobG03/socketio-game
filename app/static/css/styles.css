@@ -16,6 +16,7 @@
     padding: 0px;
 }
 
+
 body {
     position: fixed;
     width: 100%;
@@ -73,6 +74,9 @@ body {
     flex-direction: column;
 }
 
+#middle-default {
+    display: none;
+}
 
 .button {
     min-width: 20%;
@@ -112,6 +116,41 @@ body {
 
 .bottom-content > h3 {
     color: var(--text2);
+}
+
+
+#middle-username h2{
+    color: var(--text);
+    font-size: 2rem;
+    padding: 10px 10px;
+}
+
+#middle-username h2 span {
+    color: var(--green);
+}
+
+.input {
+    font-size: 2rem;
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.input:focus {
+    outline: none;
+    border: 3px solid var(--green);
+}
+
+#username-input {
+    margin-top: 50px;
+    height: 32px;
+    min-width: 300px;
+    width: 40%;
+    padding: 5px 5px;
+}
+
+
+#username-input:focus {
+    height: 26px;
 }
 
 
