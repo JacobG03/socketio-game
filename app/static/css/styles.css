@@ -118,6 +118,9 @@ body {
     color: var(--text2);
 }
 
+#middle-username {
+    display: none;
+}
 
 #middle-username h2{
     color: var(--text);
