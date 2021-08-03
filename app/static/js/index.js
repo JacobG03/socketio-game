@@ -1,4 +1,4 @@
-//* Home Page
+
 document.getElementById('button3').addEventListener('click', toggleUsernameMenu, false);
 document.getElementById('return0').addEventListener('click', toggleMainMenu, false);
 
@@ -18,7 +18,6 @@ function toggleMainMenu() {
     main_menu.style.display = 'flex';
     username_menu.style.display = 'none';
 }
-
 
 // Listen for input, save input as username in local storage
 document.getElementById('username-input').addEventListener('keyup', function (e) {
@@ -123,3 +122,4 @@ function notify() {
     }
     return true;
 }
+
