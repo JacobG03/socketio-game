@@ -36,8 +36,6 @@ function toggleContentDefault() {
 }
 
 
-
-
 // Listen for input, save input as username in local storage
 document.getElementById('username-input').addEventListener('keyup', function (e) {
     let username = document.getElementById('username-input').value;
