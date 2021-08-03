@@ -1,0 +1,45 @@
+1. Homepage:
+    1. No login/register, just username.
+    2. Display Open, 2v2, Change username, Change image (from color to picture or gif, max 128x128)
+
+2. Game:
+    2v2:
+        1. After choosing 2v2 display new content with an arrow that allows to go back.
+        2. Display: Quick search (join a public open game), 
+                    invite by link (will display a new game 
+                        but showing the user that it's clearly waiting for someone to join and whether its public or private)
+    Open:
+        Chasing person changes color to black or is highlited.
+        When a user joines:
+            HTML & CSS: Display a wating circle gif and say: Joining..
+            Javascript:
+                Check amount of users by class 'user'.
+                Create player with that length as id.
+                Rewrite code in a way that than the user controls that new created element. Not someone elses.
+                Game will be validated by every client, not server side.
+                JS functions that will check the score, player positions etc.
+                
+
+    Some data will have to be saved as cookies, no database
+    Reduce spamming by calling a function after making a step that will 
+        change a global variable can_move to false for x amount of time and back to true.
+    Display all necessary info about the game. (score, public/private, who is what color etc.)
+
+TODO:
+Check how to save web page with javascript ip/change_username etc.
+Check how to save cookies properly
+Finish username change html (add go back button)
+Add all necessary javascript:
+    -change display on click,
+    -change username on enter,
+    -display notification that username has been changed,
+    -update 'current: username'
+    -save username in cookies,
+    -save page state,
+
+
+Also add animations, later though
+
+
+Seperate site idea:
+Generate random colors but all must differ as much as possible.
