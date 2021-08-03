@@ -25,17 +25,10 @@
         change a global variable can_move to false for x amount of time and back to true.
     Display all necessary info about the game. (score, public/private, who is what color etc.)
 
+
 TODO:
+Javascript to toggle windows on click
 Check how to save web page with javascript ip/change_username etc.
-Check how to save cookies properly
-Finish username change html (add go back button)
-Add all necessary javascript:
-    -change display on click,
-    -change username on enter,
-    -display notification that username has been changed,
-    -update 'current: username'
-    -save username in cookies,
-    -save page state,
 
 
 Also add animations, later though
