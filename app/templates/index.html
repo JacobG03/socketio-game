@@ -48,7 +48,7 @@
 <div class='bottom'>
     <div class='wrapper' id='bottom-wrapper'>
         <div class='bottom-content' id='bottom-default'>
-            <h3>Online: <span>1</span></h3>
+            <h3>Made by <span>Jacob Gluszek</span></h3>
         </div>
     </div>
 </div>
@@ -56,5 +56,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script src='{{ url_for("static", filename="js/index.js") }}'></script>
 {% endblock %}
