@@ -1,23 +1,42 @@
+let back = document.getElementById('return0');
+back.addEventListener('click', toggleContentDefault, false);
 
-document.getElementById('button3').addEventListener('click', toggleUsernameMenu, false);
-document.getElementById('return0').addEventListener('click', toggleMainMenu, false);
 
-
-function toggleUsernameMenu() {
-    let main_menu = document.getElementById('middle-default');
-    let username_menu = document.getElementById('middle-username');
-    
-    main_menu.style.display = 'none';
-    username_menu.style.display = 'flex';
+const buttons = document.getElementsByClassName('button');
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', toggleContent, false);
 }
 
-function toggleMainMenu() {
-    let main_menu = document.getElementById('middle-default');
-    let username_menu = document.getElementById('middle-username');
-    
-    main_menu.style.display = 'flex';
-    username_menu.style.display = 'none';
+
+function toggleContent() {
+    let id = this.id.split('-')[1]
+    let contents = document.getElementsByClassName('middle-content');
+    for(let i = 0; i < contents.length; i++) {
+        if (contents[i].id.split('-')[1] == id) {
+            contents[i].style.display = 'flex';
+
+            // Join Open room
+            if (id == 1){
+                joinOpen();
+            }
+        } else {
+            contents[i].style.display = 'none';
+        }
+    }
 }
+
+
+function toggleContentDefault() {
+    let contents = document.getElementsByClassName('middle-content');
+    let home = document.getElementById('content-0');
+    for(let i = 0; i < contents.length; i++) {
+        contents[i].style.display = 'none';
+    }
+    home.style.display = 'flex';
+}
+
+
+
 
 // Listen for input, save input as username in local storage
 document.getElementById('username-input').addEventListener('keyup', function (e) {
@@ -122,4 +141,5 @@ function notify() {
     }
     return true;
 }
+
 
