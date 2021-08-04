@@ -2,8 +2,7 @@ from app import socketio
 from flask_socketio import emit
 
 
-@socketio.on('my event')                         
-def test_message(message):                        
-    print('works')
-    emit('my response', {'data': 'got it!'}, broadcast=True)      
+@socketio.on('get player data')                         
+def test_message(data):
+    emit('create player', data, broadcast=True)      
             

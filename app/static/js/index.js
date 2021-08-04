@@ -1,13 +1,18 @@
-let back = document.getElementById('return0');
-back.addEventListener('click', toggleContentDefault, false);
+// Listener to toggle back to home menu
+const back = document.getElementsByClassName('return');
+for (let i = 0; i < back.length; i++) {
+    back[i].addEventListener('click', toggleContentDefault, false);
+}
 
 
+// Listeners to toggle content
 const buttons = document.getElementsByClassName('button');
 for (let i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener('click', toggleContent, false);
 }
 
 
+// Toggle content after clicking button (1v1, settings etc)
 function toggleContent() {
     let id = this.id.split('-')[1]
     let contents = document.getElementsByClassName('middle-content');
@@ -17,7 +22,10 @@ function toggleContent() {
 
             // Join Open room
             if (id == 1){
-                joinOpen();
+                joinGameOpen();
+            }
+            if (id == 4){
+                renderImage();
             }
         } else {
             contents[i].style.display = 'none';
@@ -26,6 +34,7 @@ function toggleContent() {
 }
 
 
+// Toggle home screen
 function toggleContentDefault() {
     let contents = document.getElementsByClassName('middle-content');
     let home = document.getElementById('content-0');
@@ -36,7 +45,7 @@ function toggleContentDefault() {
 }
 
 
-// Listen for input, save input as username in local storage
+// Listen for input, save input as 'username' in local storage
 document.getElementById('username-input').addEventListener('keyup', function (e) {
     let username = document.getElementById('username-input').value;
     if (e.keyCode == 13) {
@@ -47,6 +56,21 @@ document.getElementById('enter-input0').addEventListener('click', () => {
     let username = document.getElementById('username-input').value;
     saveUsername(username);
 });
+
+
+
+// Listen for input, save input (image link) as 'image'
+document.getElementById('image-input1').addEventListener('keyup', function (e) {
+    let image = document.getElementById('image-input1').value;
+    if (e.keyCode == 13) {
+        saveImage(image);
+    }
+});
+document.getElementById('enter-input1').addEventListener('click', () => {
+    let image = document.getElementById('image-input1').value;
+    saveImage(image);
+});
+
 
 
 function saveUsername(username) {
@@ -78,7 +102,52 @@ function saveUsername(username) {
 }
 
 
-// 
+function saveImage(image) {
+    // if link ends with these continue
+    if (['png', 'jpg', 'jpeg', 'gif'].includes(image.split('.').pop())) {
+        // if image doesnt exist on the page create one
+        let find_image = document.getElementById('user-image');
+        
+        find_image.src = image;
+        // save image link
+        localStorage.setItem('image', image);
+
+        // notification req
+        sessionStorage.setItem('message', 'Image saved.');
+        sessionStorage.setItem('notified', true);
+        notify()
+        
+        // delete text from input field
+        document.getElementById('image-input1').value = '';
+        return true;
+    }
+    return false;
+}
+
+
+function renderImage() {
+    let find_image = document.getElementById('user-image'); 
+    if (!find_image) {
+        let image = localStorage.getItem('image');
+    
+        let parent = document.getElementById('image-box');
+        let img = document.createElement('img');
+        if(image) { 
+            img.src = image;
+        } else {
+            let default_image = 'https://avatarfiles.alphacoders.com/101/101741.jpg'
+            img.src = default_image;
+
+            localStorage.setItem('image', default_image);
+        }
+        img.id = 'user-image';
+        parent.appendChild(img);
+        return true;
+    }
+};
+
+
+// Replace all necessary html fields with new username
 function changeUsername() {
     let username_fields = document.getElementsByClassName('username-field');
     for(let i = 0; i < username_fields.length; i++) {
@@ -96,18 +165,20 @@ function restoreUsername() {
             username_fields[i].innerHTML = localStorage.getItem('username');
         } else {
             username_fields[i].innerHTML = 'Anonymous';
+            localStorage.setItem('username', 'Anonymous');
         }
     }
     return true;
 }
 
+// Restore saved data from local storage on page refresh
 function restoreData() {
     restoreUsername();
+    renderImage();
     return true;
 }
 
 restoreData();
-
 
 
 // Notification, inifine function calling
@@ -141,3 +212,42 @@ function notify() {
 }
 
 
+function joinGameOpen() {
+    var socket = io.connect('http://127.0.0.1:5000/')
+
+    // send new player data
+    socket.emit('get player data', getPlayerData());
+
+    socket.on('create player', data => {
+        createPlayer(data);
+    }) 
+}
+
+
+// return all necessary player data
+function getPlayerData() {
+    // Get this user id by checking the amount of users 'in game'
+    let id = getId();
+    let username = localStorage.getItem('username');
+    let x = 16;
+    let y = 16;
+
+
+    return {
+        'id': id,
+        'username': username,
+        'x': x,
+        'y': y
+    }
+}
+
+
+function getId() {
+    let grid = document.getElementById('grid-open');
+    return grid.children.length;
+}
+
+
+function createPlayer(data) {
+    console.log(data)
+}
