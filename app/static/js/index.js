@@ -72,7 +72,6 @@ document.getElementById('enter-input1').addEventListener('click', () => {
 });
 
 
-
 function saveUsername(username) {
     if (username.length > 0) {
         // If string contains only spaces
@@ -204,6 +203,7 @@ function notify() {
             default_content.style.display = 'none';
 
             sessionStorage.removeItem('notified');
+            sessionStorage.removeItem('message');
     
             setTimeout(notify, 3000)
         }
@@ -212,36 +212,70 @@ function notify() {
 }
 
 
+
+
+//* Game section - 'Open' mode
+
+// Remove old data on refresh
+function removePlayerData () {
+    localStorage.removeItem('x');
+    localStorage.removeItem('y');
+    localStorage.removeItem('player-id');
+}
+
+removePlayerData();
+
+
+var player = {}
+
+var players = {}
+
+
 function joinGameOpen() {
     var socket = io.connect('http://127.0.0.1:5000/')
 
     // send new player data
-    socket.emit('get player data', getPlayerData());
+    retrieveData(socket);
+    getPlayerData();
+
+    socket.on('get player data', data => {
+        createPlayer(data);
+    }) 
 
     socket.on('create player', data => {
         createPlayer(data);
     }) 
+
+    socket.on('retrieve players data', data => {
+        players = data;
+        console.log('retrieve players data', players)
+    }) 
 }
 
 
-// return all necessary player data
+// return/set all necessary player data
 function getPlayerData() {
-    // Get this user id by checking the amount of users 'in game'
     let id = getId();
     let username = localStorage.getItem('username');
+    let image = localStorage.getItem('image');
     let x = 16;
     let y = 16;
 
-
-    return {
-        'id': id,
-        'username': username,
-        'x': x,
-        'y': y
+    if (id == 0) {
+        players[id] = player;
     }
+
+    player['id'] = id;
+    player['username'] = username;
+    player['image'] = image;
+    player['x'] = x;
+    player['y'] = y;
+
+    return player;
 }
 
 
+// Get id based on amount of players already in game
 function getId() {
     let grid = document.getElementById('grid-open');
     return grid.children.length;
@@ -249,5 +283,29 @@ function getId() {
 
 
 function createPlayer(data) {
-    console.log(data)
+    retrieveData();
+    let heh = document.createElement('div');
+    heh.className = 'player';
+    heh.id = `player-${data.id}`;
+    heh.style.backgroundColor = 'blue';
+    document.getElementById('grid-open').appendChild(heh);
+}
+
+
+function retrieveData(socket) {
+    if (oldestPlayer()) {
+        socket.emit('send players data', players);
+    };
+}
+
+
+function oldestPlayer() {
+    let players = document.getElementsByClassName('player');
+    if (players.length == 0) {
+        return true;
+    }
+    else if (players[0].id.split('-')[1] == player.id) {
+        return true;
+    }
+    return false;
 }
