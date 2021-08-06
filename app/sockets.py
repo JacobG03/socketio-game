@@ -57,3 +57,10 @@ def add_player_data(player_data):
 def pass_players_data():
     print(players_data)
     emit('get players data', players_data)
+
+
+@socketio.on('player movement data')
+def player_movement_data(data):
+    players_data[data['username']]['x'] = data['x']
+    players_data[data['username']]['y'] = data['y']
+    emit('move player', data, broadcast=True)

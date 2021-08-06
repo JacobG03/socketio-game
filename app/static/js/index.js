@@ -233,6 +233,8 @@ var player = {}
 // All clients 'player' data
 var players = {}
 
+// Prevents function from being called when another user joins
+var movement_enabled = false;
 
 const grid = document.getElementById('grid-open');
 
@@ -255,6 +257,9 @@ function joinGameOpen() {
 
     socket.on('create players', data => {
         createPlayers(data);
+        if (!movement_enabled) {
+            sendMovementData(socket);
+        }
     })
 
     socket.on('message', data => {
@@ -273,11 +278,14 @@ function joinGameOpen() {
     socket.on('remove player', data => {
         removePlayer(data);
     })
+
+    socket.on('move player', data => {
+        movePlayer(data);
+    })
 }
 
 
 function createPlayerData (data, socket) {
-    player['id'] = data.length;
     player['username'] = localStorage.getItem('username');
     player['image'] = localStorage.getItem('image');
     player['x'] = 16; 
@@ -294,10 +302,8 @@ function createPlayers(data) {
             let player_div = document.createElement('div');
             player_div.className = 'player';
             player_div.id = `player-${value.username}`;
-            /*
-            player_div.style.gridColumn = player.x;
-            player_div.style.gridRow = player.y;
-            */
+            player_div.style.gridColumn = value.x;
+            player_div.style.gridRow = value.y;
             grid.appendChild(player_div);
             
             let player_image = document.createElement('img');
@@ -310,4 +316,69 @@ function createPlayers(data) {
 
 function removePlayer(data) {
     document.getElementById(`player-${data}`).remove();
+}
+
+
+function sendMovementData(socket) {
+    movement_enabled = true;
+
+    window.addEventListener('keydown', e => {
+        updatePosition(e.keyCode);
+        socket.emit('player movement data', {
+            'username': player['username'],
+            'direction': e.keyCode, 
+            'id': `player-${player['username']}`,
+            'x': player['x'],
+            'y': player['y']
+        })
+    })
+}
+
+
+function updatePosition (direction) {
+    // Left
+    if (direction == 65) {
+        if (player['x'] - 1 > 0) {
+            player['x'] -= 1;
+        }
+    }
+    // Right
+    if (direction == 68) {
+        if (player['x'] + 1 <= 32) {
+            player['x'] += 1;
+        }
+    }
+    // Up
+    if (direction == 87) {
+        if (player['y'] - 1 > 0) {
+            player['y'] -= 1;
+        }
+    }
+    //Down
+    if (direction == 83) {
+        if (player['y'] + 1 <= 32) {
+            player['y'] += 1;
+        }
+    }
+}
+
+
+function movePlayer (data) {
+    let player_div = document.getElementById(data.id);
+    // Left
+    if (data.direction == 65) {
+        player_div.style.gridColumn = data.x;
+    }
+    // Right
+    if (data.direction == 68) {
+        player_div.style.gridColumn = data.x;
+    }
+    // Up
+    if (data.direction == 87) {
+        player_div.style.gridRow = data.y;
+    }
+    //Down
+    if (data.direction == 83) {
+        player_div.style.gridRow = data.y;
+    }
 }
