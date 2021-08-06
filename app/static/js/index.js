@@ -257,8 +257,6 @@ function joinGameOpen() {
         console.log(data);
     })
 
-    socket.emit('pass players data')
-
     socket.on('get players data', data => {
         console.log(data, 'passed')
     })
