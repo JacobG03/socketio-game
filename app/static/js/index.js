@@ -240,7 +240,11 @@ const grid = document.getElementById('grid-open');
 
 
 function joinGameOpen() {
-    socket = io.connect('http://127.0.0.1:5000/');
+    if (window.location.href == 'https://socketio-game-test.herokuapp.com/') {
+        socket = io.connect('https://socketio-game-test.herokuapp.com/')
+    } else {
+        socket = io.connect('http://127.0.0.1:5000/');
+    }
 
     socket.emit('pass room data');
 
