@@ -233,22 +233,49 @@ var player = {}
 var players = {}
 
 
-
 function joinGameOpen() {
     socket = io.connect('http://127.0.0.1:5000/');
 
-    let data = {
+    socket.emit('pass room data');
+
+    let room_data = {
         'username': localStorage.getItem('username'),
         'room': 'open'
     }
     // Join 'open' room
-    socket.emit('join', data);
+    socket.emit('join', room_data);
+    
+    socket.on('get room data', data => {
+        createPlayerData(data, socket);
+    })
+
+    socket.on('create players', data => {
+        createPlayers(data);
+    })
+
     socket.on('message', data => {
         console.log(data);
     })
 
-    socket.on('disconnected', () => {
-        socket.emit('leave', data)
-    })
+    socket.emit('pass players data')
 
+    socket.on('get players data', data => {
+        console.log(data, 'passed')
+    })
+}
+
+
+function createPlayerData (data, socket) {
+    player['id'] = data.length;
+    player['username'] = localStorage.getItem('username');
+    player['image'] = localStorage.getItem('image');
+    player['x'] = 16; 
+    player['y'] = 16;
+    
+    socket.emit('add player data', player)
+}
+
+
+function createPlayers(data) {
+    console.log('create')
 }
