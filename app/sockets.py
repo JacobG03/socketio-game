@@ -30,7 +30,7 @@ def disconnect():
     # Remove player for players dictionary
     players_data.pop(session['username'])
     # Remove player from in_room list
-    in_room.remove(username)
+    in_room.remove(session['username'])
 
     leave_room(room)
     send(username + ' has left the room.', room=room)
