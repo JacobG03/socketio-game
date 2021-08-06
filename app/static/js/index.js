@@ -22,6 +22,7 @@ function toggleContent() {
 
             // Join Open room
             if (id == 1){
+                // Check if username is set and if its not already taken
                 joinGameOpen();
             }
             if (id == 4){
@@ -233,6 +234,9 @@ var player = {}
 var players = {}
 
 
+const grid = document.getElementById('grid-open');
+
+
 function joinGameOpen() {
     socket = io.connect('http://127.0.0.1:5000/');
 
@@ -260,6 +264,15 @@ function joinGameOpen() {
     socket.on('get players data', data => {
         console.log(data, 'passed')
     })
+
+    socket.on('update players', players_data => {
+        console.log('update', players_data)
+        createPlayers(players_data)
+    })
+
+    socket.on('remove player', data => {
+        removePlayer(data);
+    })
 }
 
 
@@ -275,5 +288,26 @@ function createPlayerData (data, socket) {
 
 
 function createPlayers(data) {
-    console.log('create')
+    for (let [key, value] of Object.entries(data)) {
+        let find_div = document.getElementById(`player-${value.username}`);
+        if (!find_div) {
+            let player_div = document.createElement('div');
+            player_div.className = 'player';
+            player_div.id = `player-${value.username}`;
+            /*
+            player_div.style.gridColumn = player.x;
+            player_div.style.gridRow = player.y;
+            */
+            grid.appendChild(player_div);
+            
+            let player_image = document.createElement('img');
+            player_image.src = value.image;
+            player_div.appendChild(player_image);
+        }
+    }
+}
+
+
+function removePlayer(data) {
+    document.getElementById(`player-${data}`).remove();
 }

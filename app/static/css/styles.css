@@ -314,16 +314,6 @@ body {
     border-radius: var(--border-radius);
 }
 
-#player-0 {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-}
-
-#player-1 {
-    grid-column: 32 / 33;
-    grid-row: 32 / 33;
-}
-
 
 @media only screen and (max-width: 1000px) {
     .button {

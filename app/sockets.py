@@ -17,18 +17,28 @@ def on_join(data):
     join_room(room)
     in_room.append(username)
     send(username + ' has entered the room.', room=room)
+    emit('update players', players_data, broadcast=True)
     print(in_room)
 
 
 @socketio.on('disconnect')
 def disconnect():
+    # Data necessary to leave the room
     username = session['username']
     room = session['room']
 
+    # Remove player for players dictionary
+    players_data.pop(session['username'])
+    # Remove player from in_room list
     in_room.remove(username)
+
     leave_room(room)
     send(username + ' has left the room.', room=room)
+    
+    emit('remove player', session['username'], broadcast=True)
+
     print(in_room)
+    print(players_data)
 
 
 @socketio.on('pass room data')
@@ -38,11 +48,12 @@ def pass_room_data():
 
 @socketio.on('add player data')
 def add_player_data(player_data):
-    players_data[player_data['id']] = player_data
+    players_data[player_data['username']] = player_data
     print(players_data)
-    emit('create players', players_data)
+    emit('create players', players_data, broadcast=True)
 
 
 @socketio.on('pass players data')
 def pass_players_data():
+    print(players_data)
     emit('get players data', players_data)
