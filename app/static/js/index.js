@@ -221,7 +221,6 @@ function notify() {
 function removePlayerData () {
     localStorage.removeItem('x');
     localStorage.removeItem('y');
-    localStorage.removeItem('player-id');
 }
 
 removePlayerData();
