@@ -266,6 +266,9 @@ function joinGameOpen() {
     })
 
     socket.on('message', data => {
+        sessionStorage.setItem('notified', true)
+        sessionStorage.setItem('message', data)
+        notify();
         console.log(data);
     })
 
